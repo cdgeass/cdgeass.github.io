@@ -26,6 +26,7 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 logo: https://avatars0.githubusercontent.com/u/29007752?s=460&u=6d7045e70f9bc4fb662edd1c0add5d7b30307878&v=4
 author: cdgeass
 github_username:  cdgeass
+google_analytics: UA-164971357-1
 
 # Build settings
 theme: jekyll-theme-minimal
