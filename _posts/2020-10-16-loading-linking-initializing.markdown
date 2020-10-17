@@ -5,17 +5,17 @@ tag: java jvm 类加载
 ---
 Java的类加载过程可以分成三步主要步骤：  
 
-{% mermaid %}
+<div class="mermaid">
 graph LR;
     A[加载]-->B{连接}-->C[初始化];
-{% endmermaid %}  
+</div>
 
 其中`连接`又可以分成三步：  
 
-{% mermaid %}
+<div class="mermaid">
 graph LR;
     A[加载]-->B[验证]-->C[准备]-->D[解析]-->E[初始化];
-{% endmermaid %}  
+</div>
 
 其中的加载，验证，准备，初始化需要保证相对顺序。而解析步骤可以放在初始化后进行（为了支持动态绑定）。而加载步骤可以随时进行。  
 
