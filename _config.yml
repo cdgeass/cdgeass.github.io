@@ -34,7 +34,7 @@ mermaid:
   src: "/assets/mermaid.min.js"
 
 # Build settings
-theme: jekyll-theme-minimal
+theme: jekyll-theme-architect
 plugins:
   - jekyll-feed
   - jekyll-sitemap
