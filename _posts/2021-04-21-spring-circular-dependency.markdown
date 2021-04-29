@@ -307,4 +307,4 @@ protected Object doCreateBean(String beanName, RootBeanDefinition mbd, @Nullable
 }
 ```
 
-> 这里其实直接调用 getEarlyBeanReference 并放入二级缓存中应该不会影响整体流程，如果多个 bean 循环依赖除了第一个 bean 其他的也都是从二级缓存中获取的 bean。三次缓存的设计应该是保证没有循环依赖时遵循 bean 的生命周期，在 initializeBean 阶段生成代理对象，而出现循环依赖的情况下只能提前生成代理对象。
+`这里其实直接调用 getEarlyBeanReference 并放入二级缓存中应该不会影响整体流程，如果多个 bean 循环依赖除了第一个 bean 其他的也都是从二级缓存中获取的 bean。三次缓存的设计应该是保证没有循环依赖时遵循 bean 的生命周期，在 initializeBean 阶段生成代理对象，而出现循环依赖的情况下只能提前生成代理对象。`
