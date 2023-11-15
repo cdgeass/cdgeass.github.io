@@ -1,0 +1,8 @@
+<plugins>
+    <plugin
+        id="com.alibaba.p3c.smartfox"
+        url="https://github.com/cdgeass/p3c/releases/download/v2.1.2/Alibaba.Java.Coding.Guidelines-2.1.2.zip"
+        version="2.1.2">
+        <idea-version since-build="183.4284"/>
+    </plugin>
+</plugins>
