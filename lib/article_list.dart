@@ -72,9 +72,7 @@ class _ArticleListState extends State<ArticleList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: FutureBuilder(
+    return FutureBuilder(
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -119,7 +117,6 @@ class _ArticleListState extends State<ArticleList> {
             },
           );
         },
-      ),
     );
   }
 }
