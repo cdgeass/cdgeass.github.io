@@ -55,6 +55,7 @@ class _WideArticleListState extends State<WideArticleList> {
       body: Row(
         children: [
           Flexible(
+            flex: 1,
             child: ArticleList(
               articleSelected: (article) {
                 setState(() {
@@ -63,14 +64,14 @@ class _WideArticleListState extends State<WideArticleList> {
               },
             ),
           ),
-          Flexible(
-            child: _selectedArticle == null
-                ? Container()
-                : Markdown(
-                    data: _selectedArticle!['body'],
-                    selectable: true,
-                  ),
-          )
+          if (_selectedArticle != null)
+            Flexible(
+              flex: 2,
+              child: Markdown(
+                data: _selectedArticle!['body'],
+                selectable: true,
+              ),
+            )
         ],
       ),
     );
