@@ -20,6 +20,7 @@ class _ArticleListState extends State<ArticleList> {
 
   List<dynamic> _articles = [];
 
+  String creator = 'cdgeass';
   int page = 1;
   int perPage = 30;
   late Future<dynamic> _future;
@@ -48,6 +49,7 @@ class _ArticleListState extends State<ArticleList> {
     final queryParameters = {
       'page': '$page',
       'per_page': '$perPage',
+      'creator': creator,
     };
     final url = Uri.https(
       'api.github.com',
