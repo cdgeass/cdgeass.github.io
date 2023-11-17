@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blog/article.dart';
 import 'package:flutter_blog/article_list.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 
 class AdaptiveArticleList extends StatelessWidget {
@@ -50,13 +50,13 @@ class _WideArticleListState extends State<WideArticleList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Row(
-        children: [
-          Flexible(
-            flex: 1,
-            child: ArticleList(
+    return Row(
+      children: [
+        Flexible(
+          flex: 1,
+          child: Scaffold(
+            appBar: AppBar(),
+            body: ArticleList(
               articleSelected: (article) {
                 setState(() {
                   _selectedArticle = article;
@@ -64,16 +64,21 @@ class _WideArticleListState extends State<WideArticleList> {
               },
             ),
           ),
-          if (_selectedArticle != null)
-            Flexible(
-              flex: 2,
-              child: Markdown(
-                data: _selectedArticle!['body'],
-                selectable: true,
-              ),
-            )
-        ],
-      ),
+        ),
+        if (_selectedArticle != null)
+          Flexible(
+            flex: 2,
+            child: Builder(
+              builder: (context) {
+                return Article(
+                  key: ValueKey(_selectedArticle!['number']),
+                  number: '${_selectedArticle!['number']}',
+                  article: _selectedArticle,
+                );
+              },
+            ),
+          )
+      ],
     );
   }
 }

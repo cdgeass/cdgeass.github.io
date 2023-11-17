@@ -19,6 +19,7 @@ class _ArticleListState extends State<ArticleList> {
   final _controller = ScrollController();
 
   List<dynamic> _articles = [];
+  int? _selected;
 
   String creator = 'cdgeass';
   int page = 1;
@@ -101,7 +102,9 @@ class _ArticleListState extends State<ArticleList> {
               return ListTile(
                 title: Text(title),
                 subtitle: Text(dateFormat.format(DateTime.parse(createdAt))),
+                selected: _selected == index,
                 onTap: () {
+                  _selected = index;
                   widget.articleSelected.call(article);
                 },
               );

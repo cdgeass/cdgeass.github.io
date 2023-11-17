@@ -51,28 +51,48 @@ class _ArticleState extends State<Article> {
 
   @override
   Widget build(BuildContext context) {
-    final articleWidget = FutureBuilder(
+    return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
+          return Scaffold(
+            appBar: widget.nested ? null : AppBar(),
+            body: const Center(child: CircularProgressIndicator()),
+          );
         }
 
         final article = snapshot.data!;
-        return Markdown(
-          data: article['body'],
-          selectable: true,
+        return Scaffold(
+          appBar: widget.nested
+              ? null
+              : AppBar(
+                  title: Text(article['title']),
+                ),
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: !widget.nested
+                      ? Container()
+                      : Text(
+                          article['title'],
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                ),
+                SliverFillRemaining(
+                  child: Markdown(
+                    physics: const NeverScrollableScrollPhysics(),
+                    selectable: true,
+                    padding: EdgeInsets.zero,
+                    data: article['body'],
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
-
-    if (widget.nested) {
-      return articleWidget;
-    } else {
-      return Scaffold(
-        appBar: AppBar(),
-        body: articleWidget,
-      );
-    }
   }
 }
