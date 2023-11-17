@@ -63,33 +63,12 @@ class _ArticleState extends State<Article> {
 
         final article = snapshot.data!;
         return Scaffold(
-          appBar: widget.nested
-              ? null
-              : AppBar(
-                  title: Text(article['title']),
-                ),
-          body: Padding(
-            padding: const EdgeInsets.all(16),
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: !widget.nested
-                      ? Container()
-                      : Text(
-                          article['title'],
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                ),
-                SliverFillRemaining(
-                  child: Markdown(
-                    physics: const NeverScrollableScrollPhysics(),
-                    selectable: true,
-                    padding: EdgeInsets.zero,
-                    data: article['body'],
-                  ),
-                ),
-              ],
-            ),
+          appBar: AppBar(
+            title: Text(article['title']),
+          ),
+          body: Markdown(
+            selectable: true,
+            data: article['body'],
           ),
         );
       },

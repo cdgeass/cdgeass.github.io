@@ -24,7 +24,9 @@ class NarrowArticleList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("cdgeass's blog"),
+      ),
       body: ArticleList(
         articleSelected: (article) {
           final number = article['number'];
@@ -55,7 +57,9 @@ class _WideArticleListState extends State<WideArticleList> {
         Flexible(
           flex: 1,
           child: Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              title: const Text("cdgeass's blog"),
+            ),
             body: ArticleList(
               articleSelected: (article) {
                 setState(() {
