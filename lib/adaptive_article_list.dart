@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blog/article.dart';
 import 'package:flutter_blog/article_list.dart';
+import 'package:flutter_blog/async_search_anchor.dart';
 import 'package:go_router/go_router.dart';
 
 class AdaptiveArticleList extends StatelessWidget {
@@ -23,18 +24,27 @@ class NarrowArticleList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    articleSelected(article) {
+      final number = article['number'];
+      context.goNamed(
+        'article',
+        pathParameters: {'number': '$number'},
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("cdgeass's blog"),
+        clipBehavior: Clip.none,
+        shape: const StadiumBorder(),
+        titleSpacing: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.transparent,
+        title: AsyncSearchAnchor(
+          articleSelected: articleSelected,
+        ),
       ),
       body: ArticleList(
-        articleSelected: (article) {
-          final number = article['number'];
-          context.goNamed(
-            'article',
-            pathParameters: {'number': '$number'},
-          );
-        },
+        articleSelected: articleSelected,
       ),
     );
   }
@@ -48,24 +58,37 @@ class WideArticleList extends StatefulWidget {
 }
 
 class _WideArticleListState extends State<WideArticleList> {
+  String? _selected;
   Map<String, dynamic>? _selectedArticle;
 
   @override
   Widget build(BuildContext context) {
+    articleSelected(article) {
+      final number = article['number'].toString();
+      setState(() {
+        _selected = number;
+        _selectedArticle = article;
+      });
+    }
+
     return Row(
       children: [
         Flexible(
           flex: 1,
           child: Scaffold(
             appBar: AppBar(
-              title: const Text("cdgeass's blog"),
+              clipBehavior: Clip.none,
+              shape: const StadiumBorder(),
+              titleSpacing: 0,
+              scrolledUnderElevation: 0,
+              backgroundColor: Colors.transparent,
+              title: AsyncSearchAnchor(
+                articleSelected: articleSelected,
+              ),
             ),
             body: ArticleList(
-              articleSelected: (article) {
-                setState(() {
-                  _selectedArticle = article;
-                });
-              },
+              articleSelected: articleSelected,
+              selected: _selected,
             ),
           ),
         ),

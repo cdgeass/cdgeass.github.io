@@ -8,8 +8,13 @@ typedef ArticleSelected = Function(Map<String, dynamic>);
 
 class ArticleList extends StatefulWidget {
   final ArticleSelected articleSelected;
+  final String? selected;
 
-  const ArticleList({super.key, required this.articleSelected});
+  const ArticleList({
+    super.key,
+    required this.articleSelected,
+    this.selected,
+  });
 
   @override
   State<ArticleList> createState() => _ArticleListState();
@@ -19,7 +24,6 @@ class _ArticleListState extends State<ArticleList> {
   final _controller = ScrollController();
 
   List<dynamic> _articles = [];
-  int? _selected;
 
   String creator = 'cdgeass';
   int page = 1;
@@ -74,52 +78,52 @@ class _ArticleListState extends State<ArticleList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _future,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final articles = snapshot.data as List<dynamic>;
-            _articles = articles;
-          }
+      future: _future,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final articles = snapshot.data as List<dynamic>;
+          _articles = articles;
+        }
 
-          bool loading = snapshot.connectionState == ConnectionState.waiting;
+        bool loading = snapshot.connectionState == ConnectionState.waiting;
 
-          return ListView.separated(
-            controller: _controller,
-            itemCount: _articles.length + 1,
-            itemBuilder: (context, index) {
-              if (index == _articles.length) {
-                if (loading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return Container();
+        return ListView.separated(
+          controller: _controller,
+          itemCount: _articles.length + 1,
+          itemBuilder: (context, index) {
+            if (index == _articles.length) {
+              if (loading) {
+                return const Center(child: CircularProgressIndicator());
               }
+              return Container();
+            }
 
-              final article = _articles[index];
+            final article = _articles[index];
 
-              final title = article['title'];
-              final createdAt = article['created_at'];
+            final title = article['title'];
+            final number = article['number'].toString();
+            final createdAt = article['created_at'];
 
-              return ListTile(
-                title: Text(title),
-                subtitle: Text(dateFormat.format(DateTime.parse(createdAt))),
-                selected: _selected == index,
-                onTap: () {
-                  _selected = index;
-                  widget.articleSelected.call(article);
-                },
-              );
-            },
-            separatorBuilder: (context, index) {
-              if (index == _articles.length) {
-                return Container();
-              }
-              return const Divider(
-                thickness: 1,
-                height: 1,
-              );
-            },
-          );
-        },
+            return ListTile(
+              title: Text(title),
+              subtitle: Text(dateFormat.format(DateTime.parse(createdAt))),
+              selected: widget.selected == number,
+              onTap: () {
+                widget.articleSelected.call(article);
+              },
+            );
+          },
+          separatorBuilder: (context, index) {
+            if (index == _articles.length) {
+              return Container();
+            }
+            return const Divider(
+              thickness: 1,
+              height: 1,
+            );
+          },
+        );
+      },
     );
   }
 }
