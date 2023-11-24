@@ -21,7 +21,7 @@ class _AsyncSearchAnchorState extends State<AsyncSearchAnchor> {
 
   Future<List<dynamic>> _search(String text) async {
     final queryParameters = {
-      'q': '$text is:issue repo:cdgeass/cdgeass.github.io',
+      'q': '$text is:issue is:open author:cdgeass repo:cdgeass/cdgeass.github.io',
     };
     final url = Uri.https(
       'api.github.com',
