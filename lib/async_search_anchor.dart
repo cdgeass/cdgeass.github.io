@@ -43,7 +43,7 @@ class _AsyncSearchAnchorState extends State<AsyncSearchAnchor> {
               .searchBarTheme
               .constraints
               ?.copyWith(minWidth: double.infinity) ??
-          const BoxConstraints(minWidth: double.infinity, minHeight: 56.0),
+          const BoxConstraints(minWidth: double.infinity, minHeight: 40.0),
       barBackgroundColor: MaterialStateProperty.all(
           Theme.of(context).colorScheme.onSurface.withOpacity(0.08)),
       barElevation: MaterialStateProperty.all(0),
