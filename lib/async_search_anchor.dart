@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class AsyncSearchAnchor extends StatefulWidget {
 }
 
 class _AsyncSearchAnchorState extends State<AsyncSearchAnchor> {
+  Timer? _timer;
   final dateFormat = DateFormat('yyyy-MM-dd');
 
   Future<List<dynamic>> _search(String text) async {
@@ -42,19 +44,32 @@ class _AsyncSearchAnchorState extends State<AsyncSearchAnchor> {
               .constraints
               ?.copyWith(minWidth: double.infinity) ??
           const BoxConstraints(minWidth: double.infinity, minHeight: 56.0),
+      barBackgroundColor: MaterialStateProperty.all(
+          Theme.of(context).colorScheme.onSurface.withOpacity(0.08)),
       barElevation: MaterialStateProperty.all(0),
       suggestionsBuilder: (context, controller) async {
-        final items = await _search(controller.text);
+        final text = controller.text;
 
-        return items.map((item) {
-          final title = item['title'];
-          final createdAt = item['created_at'];
+        if (_timer != null) {
+          _timer!.cancel();
+        }
+
+        final articlesCompleter = Completer<List<dynamic>>();
+        _timer = Timer(const Duration(milliseconds: 300), () async {
+          articlesCompleter.complete(await _search(text));
+        });
+
+        final articles = await articlesCompleter.future;
+
+        return articles.map((article) {
+          final title = article['title'];
+          final createdAt = article['created_at'];
           return ListTile(
             title: Text(title),
             subtitle: Text(dateFormat.format(DateTime.parse(createdAt))),
             onTap: () {
               controller.closeView(controller.text);
-              widget.articleSelected.call(item);
+              widget.articleSelected(article);
             },
           );
         }).toList();

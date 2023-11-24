@@ -79,7 +79,6 @@ class _WideArticleListState extends State<WideArticleList> {
             appBar: AppBar(
               clipBehavior: Clip.none,
               shape: const StadiumBorder(),
-              titleSpacing: 0,
               scrolledUnderElevation: 0,
               backgroundColor: Colors.transparent,
               title: AsyncSearchAnchor(
