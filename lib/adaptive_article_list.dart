@@ -36,7 +36,6 @@ class NarrowArticleList extends StatelessWidget {
       appBar: AppBar(
         clipBehavior: Clip.none,
         shape: const StadiumBorder(),
-        titleSpacing: 0,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         title: AsyncSearchAnchor(
