@@ -77,7 +77,14 @@ class _ArticleListState extends State<ArticleList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return RefreshIndicator(
+      onRefresh: () {
+        setState(() {
+          page = 1;
+          _future = _load(page);
+        });
+      },
+      child: FutureBuilder(
       future: _future,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -124,6 +131,6 @@ class _ArticleListState extends State<ArticleList> {
           },
         );
       },
-    );
+    ),);
   }
 }
