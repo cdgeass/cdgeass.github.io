@@ -78,7 +78,7 @@ class _ArticleListState extends State<ArticleList> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () {
+      onRefresh: () async {
         setState(() {
           page = 1;
           _future = _load(page);
