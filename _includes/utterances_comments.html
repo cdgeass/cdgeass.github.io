@@ -1,0 +1,11 @@
+{%- if site.utterances.repo -%}
+    {% assign utterances = site.utterances %}
+    <script src="https://utteranc.es/client.js"
+            repo={{ utterances.repo }}
+            issue-term={{ utterances.issue-term }}
+            label={{ utterances.label }}
+            theme={{ utterances.theme }}
+            crossorigin= "anonymous"
+            async>
+    </script>
+{%- endif -%}
