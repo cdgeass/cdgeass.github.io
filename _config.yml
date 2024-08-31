@@ -33,6 +33,7 @@ github_username: cdgeass
 theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-sitemap
 
 google_analytics: G-BE3SE3ZWTM
 
