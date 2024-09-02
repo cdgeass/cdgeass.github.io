@@ -29,6 +29,8 @@ url: "https://cdgeass.com" # the base hostname & protocol for your site, e.g. ht
 twitter_username: cdgeass
 github_username: cdgeass
 
+markdown: GFM
+
 # Build settings
 theme: minima
 plugins:
