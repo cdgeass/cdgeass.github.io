@@ -73,3 +73,7 @@ RUNNABLE --> TIMED_WAITING: 唤醒
 ## synchronized
 
 ### 锁升级
+
+synchronized锁可以升级不可以降级，引入锁升级可以降低锁竞争的开销，重量级锁需要在内核态和用户态之间竞争。
+
+
