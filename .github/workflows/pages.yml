@@ -25,18 +25,27 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./hexo
     steps:
-      - name: Checkout
+      - name: Checkout main
         uses: actions/checkout@v4
-      - name: Copy mds
+        with:
+          path: main
+      - name: Checkout hexo
+        uses: actions/checkout@v4
+        with:
+          ref: hexo
+          path: hexo
+      - name: Copy markdown files
+        working-directory: ./
         run: |
-          cp *.md /tmp/hexo 
-          git checkout hexo
-          cp /tmp/hexo/*.md sources/_posts/
+          cp main/*.md hexo/source/_posts/
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "lts"
+          node-version: "lts/*"
       - name: Cache NPM dependencies
         uses: actions/cache@v4
         with:
@@ -51,7 +60,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
+          path: ./hexo/public
 
   # Deployment job
   deploy:
