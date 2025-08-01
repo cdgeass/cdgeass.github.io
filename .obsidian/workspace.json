@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "d58e59a503e9d116",
+        "id": "a349fb0c728d606c",
         "type": "tabs",
         "children": [
           {
-            "id": "a85cfcca4e224e7a",
+            "id": "c2ddd1f937222172",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Java 偏向锁.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "Java 偏向锁"
             }
           }
         ]
@@ -172,8 +176,9 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "1116a8da5fcacd6a",
+  "active": "c2ddd1f937222172",
   "lastOpenFiles": [
+    "Java 偏向锁.md",
     "Hello World!.md",
     "Template/Front-matter.md",
     "Template/未命名.canvas",
