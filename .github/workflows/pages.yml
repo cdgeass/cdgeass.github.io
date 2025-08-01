@@ -41,7 +41,7 @@ jobs:
       - name: Copy markdown files
         working-directory: ./
         run: |
-          cp main/*.md hexo/sources/_posts/
+          cp main/*.md hexo/source/_posts/
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
