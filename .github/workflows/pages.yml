@@ -38,6 +38,9 @@ jobs:
         with:
           ref: hexo
           path: hexo
+      - name: List files for debugging
+        working-directory: ./
+        run: ls -R hexo
       - name: Copy markdown files
         working-directory: ./
         run: |
