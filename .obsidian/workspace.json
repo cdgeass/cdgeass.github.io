@@ -15,7 +15,7 @@
               "state": {
                 "file": "Java 偏向锁.md",
                 "mode": "source",
-                "source": false
+                "source": true
               },
               "icon": "lucide-file",
               "title": "Java 偏向锁"
@@ -140,12 +140,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Java 偏向锁.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大纲"
+              "title": "Java 偏向锁 的大纲"
             }
           },
           {
