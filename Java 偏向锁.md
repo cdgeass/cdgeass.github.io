@@ -19,7 +19,54 @@ tags:
 | ------ | ----- | ---- | ---- | ------ | ---- |
 | 偏向线程ID | Epoch |      | 年龄   | 偏向锁标志位 | 01   |
 
+### 偏向锁延迟
 
+由于 JVM 内部大量使用 synchronized 来保证线程安全而之前说过频繁的偏向锁撤销会带来额外的开销，所以 JVM 在启动后会延迟一段时间（默认为4秒）才启用偏向锁。
+
+我们使用 jol 来打印对象头的信息，以观察偏向锁的状态。
+
+```xml
+<dependency>
+    <groupId>org.openjdk.jol</groupId>
+    <artifactId>jol-core</artifactId>
+    <version>0.17</version>
+</dependency>
+```
+
+新生成的对象处于无锁不偏向的状态，此时获取到的锁为轻量级锁。
+延迟5秒以确保偏向锁已启用。此时新生成的对象为匿名偏向状态，偏向锁标志位为1，但存储的线程id为空。
+在获取锁后偏向锁偏向当前线程。
+
+```java
+/**
+ * 添加 jvm 参数确保启用偏向锁以及延迟4000毫秒启动 -XX:+UseBiasedLocking -XX:BiasedLockingStartupDelay=4000
+ */
+public static void biasedLock() {
+    Object lock = new Object();
+    System.out.println("无锁不可偏向");
+    System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+
+    synchronized (lock) {
+        System.out.println("轻量级锁");
+        System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+    }
+
+    try {
+        Thread.sleep(5000);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+
+    lock = new Object();
+    System.out.println("匿名偏向");
+    System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+
+    synchronized (lock) { }
+	
+    System.out.println("偏向当前线程");
+    System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+}
+```
 
 ### 批量重偏向
 
