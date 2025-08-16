@@ -34,7 +34,9 @@ tags:
 ```
 
 新生成的对象处于无锁不偏向的状态，此时获取到的锁为轻量级锁。
+
 延迟5秒以确保偏向锁已启用。此时新生成的对象为匿名偏向状态，偏向锁标志位为1，但存储的线程id为空。
+
 在获取锁后偏向锁偏向当前线程。
 
 ```java
@@ -70,58 +72,82 @@ public static void biasedLock() {
 
 ### 批量重偏向
 
+由于多个线程频繁竞争偏向锁而产生的撤销和升级带来的性能消耗 JVM 引入了批量重偏向的机制，当一个类的对象发生偏向锁撤销的次数达到了阈值（默认20）就会触发批量重偏向。
+
+当发生批量重偏向时首先会将对应类的 epoch 值加 1。
+
+然后遍历处于锁定状态的对象将其对象头中的 epoch 更新为类中的值。
+
+未被锁定状态的对象的 epoch 值则不会更新，当尝试获取锁是会发现其与类中的 epoch 值不一致，那么 JVM 就不会进行偏向锁撤销而是使用 CAS 操作将其偏向为新的线程。
+
+下面的代码演示了批量重偏向的过程。
+
+第19个对象因为此前偏向于线程1后被线程2持有锁，此时获取到的是轻量级锁。
+
+第20个对象获取锁时发生了批量重偏向，获取到的为偏向锁，偏向线程2。
+
+第1个对象在批量重偏向发生之前获取到的是轻量级锁，锁释放后处于无锁状态，且再获取锁为轻量级锁。
+
+第25个对象在批量重偏向发生之后则处于偏向锁状态，偏向线程2。
+
 ```java
-public class BiasedLockingDemo {  
-  
-    public static class Lock {  
-    }  
-    public static void main(String[] args) throws InterruptedException {  
-// 等待偏向锁激活  
-        Thread.sleep(5000);  
-  
-        List<Lock> locks = new ArrayList<>();  
-        int lockCount = 30;  
-  
-        // 线程t1使所有锁偏向它  
-        Thread t1 = new Thread(() -> {  
-            for (int i = 0; i < lockCount; i++) {  
-                Lock lock = new Lock();  
-                locks.add(lock);  
-                synchronized (lock) {}  
-            }        }, "t1");  
-        t1.start();  
-        t1.join();  
-  
-        System.out.println("--- 初始状态：所有锁都偏向 t1 ---");  
-        System.out.println(ClassLayout.parseInstance(locks.get(0)).toPrintable());  
-  
-        // 线程t2获取锁  
-        Thread t2 = new Thread(() -> {  
-            // 1. 获取第0个锁，这将触发标准的偏向锁撤销  
-            synchronized (locks.get(0)) {  
-                // ... do nothing  
-            }  
-  
-            // 2. 循环获取锁，以触发批量重偏向  
-            // 注意：循环从1开始，因为第0个锁已经用过了  
-            for (int i = 1; i < lockCount; i++) {  
-                synchronized (locks.get(i)) {  
-                    // ... do nothing  
-                }  
-            }        }, "t2");  
-        t2.start();  
-        t2.join();  
-  
-        System.out.println("\n--- 锁释放后 ---");  
-  
-        System.out.println(">>> Lock #0 (标准撤销后) 的状态：应为无锁不可偏向 <<<");  
-        // 该锁经历了标准撤销，释放后应变为无锁状态  
-        System.out.println(ClassLayout.parseInstance(locks.get(0)).toPrintable());  
-  
-        System.out.println("\n>>> Lock #25 (批量重偏向后) 的状态：应仍然偏向 t2 <<<");  
-        // 该锁在批量重偏向机制激活后被t2获取，释放后应保持对t2的偏向  
-        System.out.println(ClassLayout.parseInstance(locks.get(25)).toPrintable());  
-    }}
+/**
+ * 批量重偏向测试
+ *
+ * 添加 jvm 参数指定批量重偏向阈值为20 -XX:BiasedLockingBulkRebiasThreshold=20
+ */
+public static void batchRebiased() {
+    try {
+        Thread.sleep(5000);
+    } catch (InterruptedException e) {
+    }
+
+    List<Object> locks = new ArrayList<>();
+    for (int i = 0; i < 30; i++) {
+        locks.add(new Object());
+    }
+
+    t1 = new Thread(() -> {
+        for (Object lock : locks) {
+            synchronized (lock) { }
+        }
+
+        LockSupport.unpark(t2);
+    });
+
+    t2 = new Thread(() -> {
+        LockSupport.park();
+		
+        for (int i = 0; i < 30; i++) {
+            Object lock = locks.get(i);
+            synchronized (lock) {
+                if (i == 18 || i == 19) {
+                    System.out.println("第" + (i + 1) + "个对象，同步中:");
+                    System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+                }
+            }
+
+            if (i == 19) {
+                System.out.println("第20个对象释放后:");
+                System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+            }
+        }
+    });
+
+    t1.start();
+    t2.start();
+
+    try {
+        t2.join();
+    } catch (InterruptedException e) {
+    }
+
+    System.out.println("第1个对象最终状态:");
+    System.out.println(ClassLayout.parseInstance(locks.get(0)).toPrintable());
+
+    System.out.println("第25个对象最终状态:");
+    System.out.println(ClassLayout.parseInstance(locks.get(24)).toPrintable());
+}
 ```
 
 
