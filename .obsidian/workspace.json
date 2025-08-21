@@ -11,14 +11,14 @@
             "id": "c2ddd1f937222172",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "Java 偏向锁.md",
-                "mode": "source",
-                "source": true
+                "aFile": ".obsidian/app.json",
+                "bFile": ".obsidian/app.json",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "Java 偏向锁"
+              "icon": "diff",
+              "title": "Diff: app.json"
             }
           }
         ]
@@ -168,13 +168,14 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-git:Open Git source control": false,
+      "bases:创建新数据库": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
       "canvas:新建白板": false,
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
-      "command-palette:打开命令面板": false
+      "command-palette:打开命令面板": false,
+      "obsidian-git:Open Git source control": false
     }
   },
   "active": "c2ddd1f937222172",
