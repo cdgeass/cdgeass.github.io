@@ -150,4 +150,66 @@ public static void batchRebiased() {
 }
 ```
 
+### 批量撤销
 
+当竞争更次数更进一步时到达一定阈值时（默认40） JVM 会认为该类不适合使用偏向锁，触发批量撤销。
+
+批量撤销发生后会将该类标记为不可偏向，撤销现有对象的偏向锁，处于锁定状态的对象会升级成轻量级锁，新创建的对象会处于无锁不可偏向状态。
+
+下面代码通过多个线程竞争演示了批量撤销，批量撤销后所有对象均处于无锁不可偏向状态。
+
+```java
+/**
+ * 批量撤销测试
+ *
+ * 添加 jvm 参数指定批量撤销值为40 -XX:BiasedLockingBulkRevokeThreshold=40
+ */
+public static void batchRevoked() {
+    try {
+        Thread.sleep(5000);
+    } catch (InterruptedException e) {
+    }
+	
+    final List<Object> locks = new ArrayList<>();
+    for (int i = 0; i < 100; i++) {
+        locks.add(new Object());
+    }
+
+    final int threadCount = 40;
+    final CountDownLatch startLatch = new CountDownLatch(1);
+    final CountDownLatch endLatch = new CountDownLatch(threadCount);
+
+    for (int i = 0; i < threadCount; i++) {
+        new Thread(() -> {
+            try {
+                startLatch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            for (int j = 0; j < 60; j++) {
+                Object lock = locks.get(j);
+                synchronized (lock) {
+                }
+            }
+            endLatch.countDown();
+        }).start();
+    }
+
+    startLatch.countDown();
+    try {
+        endLatch.await();
+    } catch (InterruptedException e) {
+    }
+
+    System.out.println("第1个对象最终状态:");
+    System.out.println(ClassLayout.parseInstance(locks.get(0)).toPrintable());
+
+    System.out.println("第45个对象最终状态:");
+    System.out.println(ClassLayout.parseInstance(locks.get(44)).toPrintable());
+
+    System.out.println("批量撤销后，新创建的对象状态:");
+    Object newLock = new Object();
+    System.out.println(ClassLayout.parseInstance(newLock).toPrintable());
+}
+```
