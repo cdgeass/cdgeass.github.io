@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Java 偏向锁.md",
+                "file": "快速乘法和快速幂.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Java 偏向锁"
+              "title": "快速乘法和快速幂"
             }
           }
         ]
@@ -180,8 +180,8 @@
   },
   "active": "c2ddd1f937222172",
   "lastOpenFiles": [
-    "快速乘法和快速幂.md",
     "Java 偏向锁.md",
+    "快速乘法和快速幂.md",
     "Hello World!.md",
     "Template/Front-matter.md",
     "Template/未命名.canvas",

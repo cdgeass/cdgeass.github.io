@@ -1,9 +1,8 @@
 ---
 title: Java 偏向锁
 date: 2025-08-01 15:59:18
-categories: 
-tags:
-  - Java
+categories: 编程
+tags: Java
 ---
 偏向锁于 JDK1.6 引入，JDK15 中已被废弃，可以通过参数 `-XX:+UseBiasedLocking` 启用。
 
